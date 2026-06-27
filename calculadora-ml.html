@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a1a2e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Calc ML">
+<title>Calculadora ML — Preço & Ancoragem</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f4f4f2;
+    --surface: #ffffff;
+    --surface2: #f9f9f8;
+    --border: rgba(0,0,0,0.10);
+    --border-strong: rgba(0,0,0,0.18);
+    --text: #0b0b0b;
+    --text-sec: #52514e;
+    --text-muted: #898781;
+    --accent: #2a78d6;
+    --accent-bg: #e6f1fb;
+    --accent-text: #185fa5;
+    --success: #0ca30c;
+    --success-bg: #eaf3de;
+    --success-text: #3b6d11;
+    --danger: #d03b3b;
+    --danger-bg: #fcebeb;
+    --danger-text: #a32d2d;
+    --warning-bg: #faeeda;
+    --warning-text: #854f0b;
+    --radius: 8px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111110;
+      --surface: #1e1e1c;
+      --surface2: #252523;
+      --border: rgba(255,255,255,0.10);
+      --border-strong: rgba(255,255,255,0.18);
+      --text: #f0f0ee;
+      --text-sec: #c3c2b7;
+      --text-muted: #898781;
+      --accent: #3987e5;
+      --accent-bg: #0c2d52;
+      --accent-text: #85b7eb;
+      --success: #1baf7a;
+      --success-bg: #08341f;
+      --success-text: #9fe1cb;
+      --danger: #e24b4a;
+      --danger-bg: #3a0f0f;
+      --danger-text: #f09595;
+      --warning-bg: #3a2500;
+      --warning-text: #fac775;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 2rem;
+  }
+  header {
+    background: var(--surface);
+    border-bottom: 0.5px solid var(--border);
+    padding: 1rem 1.25rem;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  header .logo {
+    width: 32px; height: 32px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 16px; font-weight: 700;
+  }
+  header h1 { font-size: 16px; font-weight: 500; color: var(--text); }
+  header p { font-size: 12px; color: var(--text-muted); }
+  .container { max-width: 480px; margin: 0 auto; padding: 1rem 1rem 0; }
+  .section {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .section-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 1rem;
+  }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .field-row.single { grid-template-columns: 1fr; }
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field label { font-size: 12px; color: var(--text-sec); }
+  .field-inner {
+    display: flex; align-items: center;
+    border: 0.5px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: var(--surface2);
+    overflow: hidden;
+  }
+  .field-inner span {
+    padding: 0 10px;
+    font-size: 13px;
+    color: var(--text-muted);
+    border-right: 0.5px solid var(--border);
+    white-space: nowrap;
+    height: 100%;
+    display: flex; align-items: center;
+  }
+  .field-inner span.suffix { border-right: none; border-left: 0.5px solid var(--border); }
+  .field-inner input {
+    border: none; background: transparent;
+    padding: 10px 10px; font-size: 15px;
+    color: var(--text); width: 100%; outline: none;
+    -webkit-appearance: none;
+  }
+  .toggle-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+  .toggle-row label { font-size: 12px; color: var(--text-sec); }
+  .toggle-btn { display: flex; border: 0.5px solid var(--border-strong); border-radius: var(--radius); overflow: hidden; }
+  .toggle-btn button {
+    padding: 8px 14px; font-size: 13px;
+    border: none; background: var(--surface2);
+    color: var(--text-sec); cursor: pointer;
+    transition: all 0.15s;
+    -webkit-appearance: none;
+  }
+  .toggle-btn button.active { background: var(--accent); color: #fff; }
+  .calc-btn {
+    width: 100%; padding: 13px;
+    background: var(--accent); color: #fff;
+    border: none; border-radius: var(--radius);
+    font-size: 15px; font-weight: 500;
+    cursor: pointer; margin-top: 6px;
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .calc-btn:active { opacity: 0.85; transform: scale(0.98); }
+
+  .results { display: none; }
+  .results.visible { display: block; }
+
+  .alert {
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    font-size: 13px;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+  .alert.success { background: var(--success-bg); color: var(--success-text); border: 0.5px solid var(--success); }
+  .alert.warning { background: var(--warning-bg); color: var(--warning-text); }
+
+  .result-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+  .rcard {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+  }
+  .rcard.highlight { border-color: var(--accent); background: var(--accent-bg); }
+  .rcard .rc-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+  .rcard .rc-value { font-size: 20px; font-weight: 600; color: var(--text); }
+  .rcard.highlight .rc-value { color: var(--accent-text); }
+  .rcard .rc-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+  .breakdown {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .breakdown-title { font-size: 12px; font-weight: 500; color: var(--text-sec); margin-bottom: 10px; }
+  .brow {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 7px 0;
+    border-bottom: 0.5px solid var(--border);
+    font-size: 13px;
+  }
+  .brow:last-child { border-bottom: none; }
+  .brow .bl { color: var(--text-sec); }
+  .brow .bv { font-weight: 500; }
+  .brow .bv.neg { color: var(--danger); }
+  .brow .bv.pos { color: var(--success); }
+  .brow.total { border-top: 1px solid var(--border-strong); margin-top: 4px; padding-top: 10px; }
+  .brow.total .bl, .brow.total .bv { font-weight: 600; font-size: 14px; }
+
+  .anchor-box {
+    background: var(--surface);
+    border: 0.5px solid var(--accent);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .anchor-title {
+    font-size: 12px; font-weight: 600;
+    color: var(--accent-text);
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 6px;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .anchor-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .acard {
+    background: var(--surface2);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px 8px;
+    text-align: center;
+  }
+  .acard .ac-label { font-size: 10px; color: var(--text-muted); margin-bottom: 5px; }
+  .acard .ac-price { font-size: 16px; font-weight: 600; color: var(--text); }
+  .acard .ac-orig { font-size: 10px; color: var(--text-muted); text-decoration: line-through; margin-top: 2px; }
+  .acard .ac-badge {
+    display: inline-block; margin-top: 5px;
+    font-size: 10px; padding: 2px 7px;
+    border-radius: 20px;
+    background: var(--danger-bg); color: var(--danger-text);
+  }
+  .anchor-tip {
+    font-size: 12px; color: var(--text-muted);
+    margin-top: 12px; line-height: 1.6;
+    padding-top: 10px;
+    border-top: 0.5px solid var(--border);
+  }
+  .anchor-tip strong { color: var(--text-sec); }
+
+  .atacado-box {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: none;
+  }
+  .atacado-title { font-size: 12px; font-weight: 500; color: var(--text-sec); margin-bottom: 10px; }
+  .atrow {
+    display: grid; grid-template-columns: 90px 1fr 80px;
+    gap: 8px; align-items: center;
+    font-size: 13px; padding: 7px 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .atrow:last-child { border-bottom: none; }
+  .atrow.header { color: var(--text-muted); font-size: 11px; }
+  .atrow .qty { color: var(--text-sec); }
+  .atrow .price { font-weight: 500; }
+  .atrow .margin { text-align: right; }
+
+  @media (max-width: 360px) {
+    .result-cards { grid-template-columns: 1fr; }
+    .anchor-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">ML</div>
+  <div>
+    <h1>Calculadora de Preço</h1>
+    <p>Mercado Livre · Margem & Ancoragem</p>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="section">
+    <div class="section-title">Produto</div>
+    <div class="field-row">
+      <div class="field">
+        <label>Custo do produto (R$)</label>
+        <div class="field-inner"><span>R$</span><input type="number" id="custo" value="7.50" step="0.01" min="0" inputmode="decimal"></div>
+      </div>
+      <div class="field">
+        <label>Peso (kg)</label>
+        <div class="field-inner"><input type="number" id="peso" value="0.5" step="0.1" min="0.1" inputmode="decimal"><span class="suffix">kg</span></div>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Margem desejada (%)</label>
+        <div class="field-inner"><input type="number" id="margem" value="12" step="1" min="1" max="80" inputmode="numeric"><span class="suffix">%</span></div>
+      </div>
+      <div class="field">
+        <label>Ancoragem (%)</label>
+        <div class="field-inner"><input type="number" id="ancoragem" value="30" step="1" min="10" max="60" inputmode="numeric"><span class="suffix">%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Configurações Mercado Livre</div>
+    <div class="toggle-row">
+      <label>Tipo de anúncio:</label>
+      <div class="toggle-btn">
+        <button class="active" id="btn-premium" onclick="setTipo('premium')">Premium (16%)</button>
+        <button id="btn-classico" onclick="setTipo('classico')">Clássico (11%)</button>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Ads / Marketing (%)</label>
+        <div class="field-inner"><input type="number" id="ads" value="10" step="1" min="0" max="30" inputmode="numeric"><span class="suffix">%</span></div>
+      </div>
+      <div class="field">
+        <label>Imposto (%)</label>
+        <div class="field-inner"><input type="number" id="imposto" value="6" step="1" min="0" max="20" inputmode="numeric"><span class="suffix">%</span></div>
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calcular()">Calcular preços ↗</button>
+  </div>
+
+  <div class="results" id="results">
+
+    <div id="alert-box" class="alert success"></div>
+
+    <div class="result-cards">
+      <div class="rcard">
+        <div class="rc-label">Preço de venda</div>
+        <div class="rc-value" id="r-preco-ideal">—</div>
+        <div class="rc-sub">preço recomendado</div>
+      </div>
+      <div class="rcard highlight">
+        <div class="rc-label">Margem líquida</div>
+        <div class="rc-value" id="r-margem-real">—</div>
+        <div class="rc-sub" id="r-lucro-sub">lucro por unidade</div>
+      </div>
+      <div class="rcard">
+        <div class="rc-label">Lucro líquido</div>
+        <div class="rc-value" id="r-lucro">—</div>
+        <div class="rc-sub">por unidade vendida</div>
+      </div>
+      <div class="rcard">
+        <div class="rc-label">Preço ancorado</div>
+        <div class="rc-value" id="r-ancora">—</div>
+        <div class="rc-sub">suba agora</div>
+      </div>
+    </div>
+
+    <div class="breakdown">
+      <div class="breakdown-title">Detalhamento de taxas</div>
+      <div class="brow"><span class="bl">Preço de venda</span><span class="bv" id="b-venda">—</span></div>
+      <div class="brow"><span class="bl" id="b-comissao-label">Comissão ML</span><span class="bv neg" id="b-comissao">—</span></div>
+      <div class="brow"><span class="bl">Custo fixo ML</span><span class="bv neg" id="b-fixo">—</span></div>
+      <div class="brow"><span class="bl">Frete coparticipado</span><span class="bv neg" id="b-frete">—</span></div>
+      <div class="brow"><span class="bl" id="b-imp-label">Imposto</span><span class="bv neg" id="b-imposto">—</span></div>
+      <div class="brow"><span class="bl" id="b-ads-label">Ads / Marketing</span><span class="bv neg" id="b-ads">—</span></div>
+      <div class="brow"><span class="bl">Custo do produto</span><span class="bv neg" id="b-custo">—</span></div>
+      <div class="brow total"><span class="bl">Lucro líquido</span><span class="bv pos" id="b-lucro">—</span></div>
+    </div>
+
+    <div class="anchor-box">
+      <div class="anchor-title">🎯 Estratégia de ancoragem</div>
+      <div class="anchor-grid">
+        <div class="acard">
+          <div class="ac-label">Preço ancorado</div>
+          <div class="ac-price" id="a-anchor">—</div>
+          <div class="ac-orig">preço cheio</div>
+          <div class="ac-badge" id="a-suba">suba agora</div>
+        </div>
+        <div class="acard">
+          <div class="ac-label">Preço promocional</div>
+          <div class="ac-price" id="a-promo">—</div>
+          <div class="ac-orig" id="a-promo-orig">—</div>
+          <div class="ac-badge" id="a-badge-pct">30% off</div>
+        </div>
+        <div class="acard">
+          <div class="ac-label">Margem na promoção</div>
+          <div class="ac-price" id="a-margem-promo">—</div>
+          <div class="ac-orig" id="a-lucro-promo">—</div>
+          <div class="ac-badge" id="a-ok">verificando</div>
+        </div>
+      </div>
+      <div class="anchor-tip">
+        <strong>Como usar:</strong> Suba para o preço ancorado agora → aguarde ~7 dias → ative a promoção com o desconto configurado → comprador vê o desconto e você mantém a margem nos Ads.
+      </div>
+    </div>
+
+    <div class="atacado-box" id="atacado-box">
+      <div class="atacado-title">Preços de atacado — 12% de margem garantida</div>
+      <div style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">Informe o custo unitário que você paga em cada faixa para calcular o preço correto.</div>
+      <div class="atrow header"><span>Qtd mínima</span><span>Seu custo unit.</span><span style="text-align:right">Preço de venda</span></div>
+      <div class="atrow" style="align-items:center">
+        <span class="qty">1 unidade</span>
+        <div class="field-inner" style="height:34px;"><span>R$</span><input type="number" id="at-custo-1" step="0.01" min="0" inputmode="decimal" style="padding:6px 8px;font-size:13px;" placeholder="ex: 7,50"></div>
+        <span class="margin" id="at-result-1" style="text-align:right;font-size:13px;color:var(--text-muted)">—</span>
+      </div>
+      <div class="atrow" style="align-items:center">
+        <span class="qty">5 ou mais</span>
+        <div class="field-inner" style="height:34px;"><span>R$</span><input type="number" id="at-custo-2" step="0.01" min="0" inputmode="decimal" style="padding:6px 8px;font-size:13px;" placeholder="ex: 6,50"></div>
+        <span class="margin" id="at-result-2" style="text-align:right;font-size:13px;color:var(--text-muted)">—</span>
+      </div>
+      <div class="atrow" style="align-items:center">
+        <span class="qty">10 ou mais</span>
+        <div class="field-inner" style="height:34px;"><span>R$</span><input type="number" id="at-custo-3" step="0.01" min="0" inputmode="decimal" style="padding:6px 8px;font-size:13px;" placeholder="ex: 5,80"></div>
+        <span class="margin" id="at-result-3" style="text-align:right;font-size:13px;color:var(--text-muted)">—</span>
+      </div>
+      <button class="calc-btn" style="margin-top:12px;" onclick="calcAtacado()">Calcular atacado</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let tipoAnuncio = 'premium';
+
+function setTipo(t) {
+  tipoAnuncio = t;
+  document.getElementById('btn-premium').className = t === 'premium' ? 'active' : '';
+  document.getElementById('btn-classico').className = t === 'classico' ? 'active' : '';
+}
+
+function getFreteCoparticipado(preco, peso) {
+  if (preco >= 79) return 0;
+  return peso <= 0.3 ? 6.25 : peso <= 0.7 ? 6.50 : 6.75;
+}
+
+function getCustoFixo(preco) {
+  if (preco < 29) return 0;
+  if (preco <= 79) return 6.50;
+  return 0;
+}
+
+function calcLucro(preco, custo, peso, comissaoPct, impostoPct, adsPct) {
+  const comissao = preco * comissaoPct / 100;
+  const fixo = getCustoFixo(preco);
+  const frete = getFreteCoparticipado(preco, peso);
+  const imposto = preco * impostoPct / 100;
+  const ads = preco * adsPct / 100;
+  const lucro = preco - comissao - fixo - frete - imposto - ads - custo;
+  const margem = (lucro / preco) * 100;
+  return { comissao, fixo, frete, imposto, ads, lucro, margem };
+}
+
+function encontrarPrecoIdeal(custo, peso, comissaoPct, impostoPct, adsPct, margemDesejada) {
+  let preco = custo * 3 + 10;
+  for (let i = 0; i < 2000; i++) {
+    const r = calcLucro(preco, custo, peso, comissaoPct, impostoPct, adsPct);
+    if (Math.abs(r.margem - margemDesejada) < 0.03) break;
+    preco += r.margem < margemDesejada ? 0.05 : -0.02;
+  }
+  return Math.ceil(preco * 20) / 20;
+}
+
+function fmt(v) { return 'R$ ' + v.toFixed(2).replace('.', ','); }
+function fmtPct(v) { return v.toFixed(1) + '%'; }
+
+function calcular() {
+  const custo = parseFloat(document.getElementById('custo').value) || 0;
+  const peso = parseFloat(document.getElementById('peso').value) || 0.5;
+  const margemDes = parseFloat(document.getElementById('margem').value) || 12;
+  const ancPct = parseFloat(document.getElementById('ancoragem').value) || 30;
+  const adsPct = parseFloat(document.getElementById('ads').value) || 10;
+  const impostoPct = parseFloat(document.getElementById('imposto').value) || 6;
+  const comissaoPct = tipoAnuncio === 'premium' ? 16 : 11;
+
+  const precoIdeal = encontrarPrecoIdeal(custo, peso, comissaoPct, impostoPct, adsPct, margemDes);
+  const rIdeal = calcLucro(precoIdeal, custo, peso, comissaoPct, impostoPct, adsPct);
+  const precoAncora = Math.ceil((precoIdeal / (1 - ancPct / 100)) * 20) / 20;
+  const rPromo = calcLucro(precoIdeal, custo, peso, comissaoPct, impostoPct, adsPct);
+
+  document.getElementById('r-preco-ideal').textContent = fmt(precoIdeal);
+  document.getElementById('r-margem-real').textContent = fmtPct(rIdeal.margem);
+  document.getElementById('r-lucro').textContent = fmt(rIdeal.lucro);
+  document.getElementById('r-lucro-sub').textContent = fmt(rIdeal.lucro) + ' por un.';
+  document.getElementById('r-ancora').textContent = fmt(precoAncora);
+
+  document.getElementById('b-venda').textContent = fmt(precoIdeal);
+  document.getElementById('b-comissao-label').textContent = 'Comissão ML (' + comissaoPct + '%)';
+  document.getElementById('b-comissao').textContent = '- ' + fmt(rIdeal.comissao);
+  document.getElementById('b-fixo').textContent = rIdeal.fixo > 0 ? '- ' + fmt(rIdeal.fixo) : 'Não aplicado';
+  document.getElementById('b-frete').textContent = rIdeal.frete > 0 ? '- ' + fmt(rIdeal.frete) : 'Grátis (≥ R$79)';
+  document.getElementById('b-imp-label').textContent = 'Imposto (' + impostoPct + '%)';
+  document.getElementById('b-imposto').textContent = '- ' + fmt(rIdeal.imposto);
+  document.getElementById('b-ads-label').textContent = 'Ads / Marketing (' + adsPct + '%)';
+  document.getElementById('b-ads').textContent = '- ' + fmt(rIdeal.ads);
+  document.getElementById('b-custo').textContent = '- ' + fmt(custo);
+  document.getElementById('b-lucro').textContent = fmt(rIdeal.lucro);
+
+  document.getElementById('a-anchor').textContent = fmt(precoAncora);
+  document.getElementById('a-promo').textContent = fmt(precoIdeal);
+  document.getElementById('a-promo-orig').textContent = 'era ' + fmt(precoAncora);
+  document.getElementById('a-badge-pct').textContent = ancPct + '% off';
+  document.getElementById('a-margem-promo').textContent = fmtPct(rPromo.margem);
+  document.getElementById('a-lucro-promo').textContent = fmt(rPromo.lucro) + ' por un.';
+
+  const okPromo = rPromo.margem >= margemDes * 0.95;
+  const badgeEl = document.getElementById('a-ok');
+  badgeEl.textContent = okPromo ? 'Margem ok ✓' : 'Margem baixa';
+  badgeEl.style.background = okPromo ? 'var(--success-bg)' : 'var(--danger-bg)';
+  badgeEl.style.color = okPromo ? 'var(--success-text)' : 'var(--danger-text)';
+
+  const alert = document.getElementById('alert-box');
+  alert.textContent = 'Preço ideal: ' + fmt(precoIdeal) + ' | Ancorado: ' + fmt(precoAncora) + ' | Promo: ' + fmt(precoIdeal) + ' (' + ancPct + '% off · ' + fmtPct(rPromo.margem) + ' de margem)';
+  alert.className = 'alert ' + (okPromo ? 'success' : 'warning');
+
+  document.getElementById('atacado-box').style.display = 'block';
+  document.getElementById('results').className = 'results visible';
+  document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function calcAtacado() {
+  const peso = parseFloat(document.getElementById('peso').value) || 0.5;
+  const margemDes = parseFloat(document.getElementById('margem').value) || 12;
+  const adsPct = parseFloat(document.getElementById('ads').value) || 10;
+  const impostoPct = parseFloat(document.getElementById('imposto').value) || 6;
+  const comissaoPct = tipoAnuncio === 'premium' ? 16 : 11;
+
+  for (let i = 1; i <= 3; i++) {
+    const custoAt = parseFloat(document.getElementById('at-custo-' + i).value);
+    const resEl = document.getElementById('at-result-' + i);
+    if (!custoAt || custoAt <= 0) { resEl.textContent = '—'; resEl.style.color = 'var(--text-muted)'; continue; }
+    const pAt = encontrarPrecoIdeal(custoAt, peso, comissaoPct, impostoPct, adsPct, margemDes);
+    const rAt = calcLucro(pAt, custoAt, peso, comissaoPct, impostoPct, adsPct);
+    resEl.textContent = fmt(pAt) + ' (' + fmtPct(rAt.margem) + ')';
+    resEl.style.color = 'var(--success)';
+  }
+}
+</script>
+</body>
+</html>
