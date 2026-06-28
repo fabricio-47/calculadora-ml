@@ -385,25 +385,30 @@
     </div>
 
     <div class="atacado-box" id="atacado-box">
-      <div class="atacado-title">Preços de atacado — 12% de margem garantida</div>
-      <div style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">Informe o custo unitário que você paga em cada faixa para calcular o preço correto.</div>
-      <div class="atrow header"><span>Qtd mínima</span><span>Seu custo unit.</span><span style="text-align:right">Preço de venda</span></div>
-      <div class="atrow" style="align-items:center">
-        <span class="qty">1 unidade</span>
-        <div class="field-inner" style="height:34px;"><span>R$</span><input type="number" id="at-custo-1" step="0.01" min="0" inputmode="decimal" style="padding:6px 8px;font-size:13px;" placeholder="ex: 7,50"></div>
-        <span class="margin" id="at-result-1" style="text-align:right;font-size:13px;color:var(--text-muted)">—</span>
+      <div class="atacado-title">Preços de atacado — automático</div>
+      <div style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">Calculado automaticamente com desconto progressivo sobre o preço varejo.</div>
+      <div class="atrow header"><span>Qtd</span><span>Preço unit.</span><span>Desconto</span><span style="text-align:right">Margem</span></div>
+      <div class="atrow" id="at-row-1">
+        <span class="qty" id="at-qty-1">1 un</span>
+        <span class="price" id="at-price-1">—</span>
+        <span style="font-size:12px; color:var(--text-muted)" id="at-desc-1">—</span>
+        <span class="margin" id="at-margem-1" style="text-align:right">—</span>
       </div>
-      <div class="atrow" style="align-items:center">
-        <span class="qty">5 ou mais</span>
-        <div class="field-inner" style="height:34px;"><span>R$</span><input type="number" id="at-custo-2" step="0.01" min="0" inputmode="decimal" style="padding:6px 8px;font-size:13px;" placeholder="ex: 6,50"></div>
-        <span class="margin" id="at-result-2" style="text-align:right;font-size:13px;color:var(--text-muted)">—</span>
+      <div class="atrow" id="at-row-2">
+        <span class="qty" id="at-qty-2">5+</span>
+        <span class="price" id="at-price-2">—</span>
+        <span style="font-size:12px; color:var(--text-muted)" id="at-desc-2">8% off</span>
+        <span class="margin" id="at-margem-2" style="text-align:right">—</span>
       </div>
-      <div class="atrow" style="align-items:center">
-        <span class="qty">10 ou mais</span>
-        <div class="field-inner" style="height:34px;"><span>R$</span><input type="number" id="at-custo-3" step="0.01" min="0" inputmode="decimal" style="padding:6px 8px;font-size:13px;" placeholder="ex: 5,80"></div>
-        <span class="margin" id="at-result-3" style="text-align:right;font-size:13px;color:var(--text-muted)">—</span>
+      <div class="atrow" id="at-row-3">
+        <span class="qty" id="at-qty-3">10+</span>
+        <span class="price" id="at-price-3">—</span>
+        <span style="font-size:12px; color:var(--text-muted)" id="at-desc-3">14% off</span>
+        <span class="margin" id="at-margem-3" style="text-align:right">—</span>
       </div>
-      <button class="calc-btn" style="margin-top:12px;" onclick="calcAtacado()">Calcular atacado</button>
+      <div style="margin-top:12px; padding-top:10px; border-top:0.5px solid var(--border); font-size:12px; color:var(--text-muted); line-height:1.6;">
+        <strong style="color:var(--text-sec);">Custo implícito detectado:</strong> <span id="at-custo-impl">—</span> por unidade
+      </div>
     </div>
 
   </div>
@@ -502,28 +507,30 @@ function calcular() {
   alert.textContent = 'Preço ideal: ' + fmt(precoIdeal) + ' | Ancorado: ' + fmt(precoAncora) + ' | Promo: ' + fmt(precoIdeal) + ' (' + ancPct + '% off · ' + fmtPct(rPromo.margem) + ' de margem)';
   alert.className = 'alert ' + (okPromo ? 'success' : 'warning');
 
+  // Atacado automatico
+  const atacadoDescontos = [0, 0.08, 0.14];
+  const atacadoQtds = ['1 un', '5 ou mais', '10 ou mais'];
+  const atacadoDesc = ['—', '8% off', '14% off'];
+
+  // Calcular custo implicito a partir do preco ideal
+  const custoImpl = precoIdeal - rIdeal.comissao - rIdeal.fixo - rIdeal.frete - rIdeal.imposto - rIdeal.ads - rIdeal.lucro;
+
+  for (let i = 0; i < 3; i++) {
+    const pAt = Math.round((precoIdeal * (1 - atacadoDescontos[i])) * 20) / 20;
+    const rAt = calcLucro(pAt, custoImpl, peso, comissaoPct, impostoPct, adsPct);
+    document.getElementById('at-qty-' + (i+1)).textContent = atacadoQtds[i];
+    document.getElementById('at-price-' + (i+1)).textContent = fmt(pAt);
+    document.getElementById('at-desc-' + (i+1)).textContent = atacadoDesc[i];
+    document.getElementById('at-margem-' + (i+1)).textContent = fmtPct(rAt.margem);
+    document.getElementById('at-margem-' + (i+1)).style.color = rAt.margem >= 5 ? 'var(--success)' : 'var(--danger)';
+  }
+  document.getElementById('at-custo-impl').textContent = fmt(custoImpl);
+
   document.getElementById('atacado-box').style.display = 'block';
   document.getElementById('results').className = 'results visible';
   document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-function calcAtacado() {
-  const peso = parseFloat(document.getElementById('peso').value) || 0.5;
-  const margemDes = parseFloat(document.getElementById('margem').value) || 12;
-  const adsPct = parseFloat(document.getElementById('ads').value) || 10;
-  const impostoPct = parseFloat(document.getElementById('imposto').value) || 6;
-  const comissaoPct = tipoAnuncio === 'premium' ? 16 : 11;
-
-  for (let i = 1; i <= 3; i++) {
-    const custoAt = parseFloat(document.getElementById('at-custo-' + i).value);
-    const resEl = document.getElementById('at-result-' + i);
-    if (!custoAt || custoAt <= 0) { resEl.textContent = '—'; resEl.style.color = 'var(--text-muted)'; continue; }
-    const pAt = encontrarPrecoIdeal(custoAt, peso, comissaoPct, impostoPct, adsPct, margemDes);
-    const rAt = calcLucro(pAt, custoAt, peso, comissaoPct, impostoPct, adsPct);
-    resEl.textContent = fmt(pAt) + ' (' + fmtPct(rAt.margem) + ')';
-    resEl.style.color = 'var(--success)';
-  }
-}
 </script>
 </body>
 </html>
