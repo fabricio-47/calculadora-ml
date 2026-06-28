@@ -385,29 +385,34 @@
     </div>
 
     <div class="atacado-box" id="atacado-box">
-      <div class="atacado-title">Preços de atacado — automático</div>
-      <div style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">Calculado automaticamente com desconto progressivo sobre o preço varejo.</div>
-      <div class="atrow header"><span>Qtd</span><span>Preço unit.</span><span>Desconto</span><span style="text-align:right">Margem</span></div>
-      <div class="atrow" id="at-row-1">
-        <span class="qty" id="at-qty-1">1 un</span>
-        <span class="price" id="at-price-1">—</span>
-        <span style="font-size:12px; color:var(--text-muted)" id="at-desc-1">—</span>
-        <span class="margin" id="at-margem-1" style="text-align:right">—</span>
+      <div class="atacado-title">Tabela de atacado</div>
+      <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">Digite seu custo unitário → preços calculados automaticamente.</div>
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:14px; flex-wrap:wrap;">
+        <label style="font-size:13px; color:var(--text-sec);">Custo unitário:</label>
+        <div class="field-inner" style="height:36px; width:140px;">
+          <span>R$</span>
+          <input type="number" id="at-custo-unit" step="0.01" min="0" inputmode="decimal" style="padding:6px 8px;font-size:14px;" placeholder="ex: 7,50" oninput="calcAtacadoAuto()">
+        </div>
       </div>
-      <div class="atrow" id="at-row-2">
-        <span class="qty" id="at-qty-2">5+</span>
-        <span class="price" id="at-price-2">—</span>
-        <span style="font-size:12px; color:var(--text-muted)" id="at-desc-2">8% off</span>
-        <span class="margin" id="at-margem-2" style="text-align:right">—</span>
+
+      <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; font-size:13px;">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border-strong);">
+              <th style="text-align:left; padding:6px 8px; color:var(--text-muted); font-weight:500;">Qtd</th>
+              <th style="text-align:right; padding:6px 8px; color:var(--text-muted); font-weight:500;">Custo total</th>
+              <th style="text-align:right; padding:6px 8px; color:var(--text-muted); font-weight:500;">Venda total</th>
+              <th style="text-align:right; padding:6px 8px; color:var(--text-muted); font-weight:500;">Ancorado</th>
+              <th style="text-align:right; padding:6px 8px; color:var(--text-muted); font-weight:500;">Margem</th>
+            </tr>
+          </thead>
+          <tbody id="at-tbody">
+            <tr><td colspan="5" style="text-align:center; padding:16px; color:var(--text-muted); font-size:12px;">Digite o custo unitário acima</td></tr>
+          </tbody>
+        </table>
       </div>
-      <div class="atrow" id="at-row-3">
-        <span class="qty" id="at-qty-3">10+</span>
-        <span class="price" id="at-price-3">—</span>
-        <span style="font-size:12px; color:var(--text-muted)" id="at-desc-3">14% off</span>
-        <span class="margin" id="at-margem-3" style="text-align:right">—</span>
-      </div>
-      <div style="margin-top:12px; padding-top:10px; border-top:0.5px solid var(--border); font-size:12px; color:var(--text-muted); line-height:1.6;">
-        <strong style="color:var(--text-sec);">Custo implícito detectado:</strong> <span id="at-custo-impl">—</span> por unidade
+      <div style="margin-top:10px; padding-top:10px; border-top:0.5px solid var(--border); font-size:11px; color:var(--text-muted); line-height:1.6;">
+        Varejo: 0% off (12% margem) · Atacado 5+: 8% off (~8% margem) · Atacado 10+: 14% off (~5% margem)
       </div>
     </div>
 
@@ -507,30 +512,57 @@ function calcular() {
   alert.textContent = 'Preço ideal: ' + fmt(precoIdeal) + ' | Ancorado: ' + fmt(precoAncora) + ' | Promo: ' + fmt(precoIdeal) + ' (' + ancPct + '% off · ' + fmtPct(rPromo.margem) + ' de margem)';
   alert.className = 'alert ' + (okPromo ? 'success' : 'warning');
 
-  // Atacado automatico
-  const atacadoDescontos = [0, 0.08, 0.14];
-  const atacadoQtds = ['1 un', '5 ou mais', '10 ou mais'];
-  const atacadoDesc = ['—', '8% off', '14% off'];
-
-  // Calcular custo implicito a partir do preco ideal
-  const custoImpl = precoIdeal - rIdeal.comissao - rIdeal.fixo - rIdeal.frete - rIdeal.imposto - rIdeal.ads - rIdeal.lucro;
-
-  for (let i = 0; i < 3; i++) {
-    const pAt = Math.round((precoIdeal * (1 - atacadoDescontos[i])) * 20) / 20;
-    const rAt = calcLucro(pAt, custoImpl, peso, comissaoPct, impostoPct, adsPct);
-    document.getElementById('at-qty-' + (i+1)).textContent = atacadoQtds[i];
-    document.getElementById('at-price-' + (i+1)).textContent = fmt(pAt);
-    document.getElementById('at-desc-' + (i+1)).textContent = atacadoDesc[i];
-    document.getElementById('at-margem-' + (i+1)).textContent = fmtPct(rAt.margem);
-    document.getElementById('at-margem-' + (i+1)).style.color = rAt.margem >= 5 ? 'var(--success)' : 'var(--danger)';
-  }
-  document.getElementById('at-custo-impl').textContent = fmt(custoImpl);
-
   document.getElementById('atacado-box').style.display = 'block';
+  // Pre-preenche campo custo se vazio
+  const campoAt = document.getElementById('at-custo-unit');
+  if (!campoAt.value) campoAt.value = custo.toFixed(2);
+  calcAtacadoAuto();
   document.getElementById('results').className = 'results visible';
   document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+
+function calcAtacadoAuto() {
+  const custoUnit = parseFloat(document.getElementById('at-custo-unit').value);
+  if (!custoUnit || custoUnit <= 0) return;
+
+  const peso = parseFloat(document.getElementById('peso').value) || 0.5;
+  const adsPct = parseFloat(document.getElementById('ads').value) || 10;
+  const impostoPct = parseFloat(document.getElementById('imposto').value) || 6;
+  const ancPct = parseFloat(document.getElementById('ancoragem').value) || 30;
+  const comissaoPct = tipoAnuncio === 'premium' ? 16 : 11;
+  const margemDes = parseFloat(document.getElementById('margem').value) || 12;
+
+  const faixas = [
+    { qtd: 1,  label: '1 unidade',  desc: 'varejo',   margAlvo: margemDes, descPct: 0 },
+    { qtd: 5,  label: '5 unidades', desc: '8% off',   margAlvo: 8,         descPct: 0.08 },
+    { qtd: 10, label: '10 unidades',desc: '14% off',  margAlvo: 5,         descPct: 0.14 }
+  ];
+
+  const precoBase = encontrarPrecoIdeal(custoUnit, peso, comissaoPct, impostoPct, adsPct, margemDes);
+
+  let html = '';
+  faixas.forEach(f => {
+    const precoUnit = Math.ceil((precoBase * (1 - f.descPct)) * 20) / 20;
+    const rAt = calcLucro(precoUnit, custoUnit, peso, comissaoPct, impostoPct, adsPct);
+    const custoTotal = custoUnit * f.qtd;
+    const vendaTotal = precoUnit * f.qtd;
+    const ancoraUnit = Math.ceil((precoUnit / (1 - ancPct / 100)) * 20) / 20;
+    const ancoraTotal = ancoraUnit * f.qtd;
+    const margemOk = rAt.margem >= 4;
+    const cor = margemOk ? 'var(--success)' : 'var(--danger)';
+
+    html += '<tr style="border-bottom:0.5px solid var(--border);">';
+    html += '<td style="padding:8px 8px; color:var(--text-primary); font-weight:500;">' + f.label + '</td>';
+    html += '<td style="padding:8px 8px; text-align:right; color:var(--text-secondary);">' + fmt(custoTotal) + '</td>';
+    html += '<td style="padding:8px 8px; text-align:right; color:var(--text-primary); font-weight:500;">' + fmt(vendaTotal) + '<br><span style="font-size:11px;color:var(--text-muted);">' + fmt(precoUnit) + '/un · ' + f.desc + '</span></td>';
+    html += '<td style="padding:8px 8px; text-align:right; color:var(--text-accent);">' + fmt(ancoraTotal) + '<br><span style="font-size:11px;color:var(--text-muted);">' + fmt(ancoraUnit) + '/un</span></td>';
+    html += '<td style="padding:8px 8px; text-align:right; color:' + cor + '; font-weight:500;">' + fmtPct(rAt.margem) + '</td>';
+    html += '</tr>';
+  });
+
+  document.getElementById('at-tbody').innerHTML = html;
+}
 </script>
 </body>
 </html>
