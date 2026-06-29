@@ -55,138 +55,43 @@
       --warning-text: #fac775;
     }
   }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    padding-bottom: 2rem;
-  }
-  header {
-    background: var(--surface);
-    border-bottom: 0.5px solid var(--border);
-    padding: 1rem 1.25rem;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  header .logo {
-    width: 32px; height: 32px;
-    background: var(--accent);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    color: #fff; font-size: 16px; font-weight: 700;
-  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 2rem; }
+  header { background: var(--surface); border-bottom: 0.5px solid var(--border); padding: 1rem 1.25rem; position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 10px; }
+  header .logo { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 16px; font-weight: 700; }
   header h1 { font-size: 16px; font-weight: 500; color: var(--text); }
   header p { font-size: 12px; color: var(--text-muted); }
   .container { max-width: 480px; margin: 0 auto; padding: 1rem 1rem 0; }
-  .section {
-    background: var(--surface);
-    border: 0.5px solid var(--border);
-    border-radius: 12px;
-    padding: 1.25rem;
-    margin-bottom: 1rem;
-  }
-  .section-title {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-bottom: 1rem;
-  }
+  .section { background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
+  .section-title { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 1rem; }
   .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-  .field-row.single { grid-template-columns: 1fr; }
   .field { display: flex; flex-direction: column; gap: 5px; }
   .field label { font-size: 12px; color: var(--text-sec); }
-  .field-inner {
-    display: flex; align-items: center;
-    border: 0.5px solid var(--border-strong);
-    border-radius: var(--radius);
-    background: var(--surface2);
-    overflow: hidden;
-  }
-  .field-inner span {
-    padding: 0 10px;
-    font-size: 13px;
-    color: var(--text-muted);
-    border-right: 0.5px solid var(--border);
-    white-space: nowrap;
-    height: 100%;
-    display: flex; align-items: center;
-  }
+  .field-inner { display: flex; align-items: center; border: 0.5px solid var(--border-strong); border-radius: var(--radius); background: var(--surface2); overflow: hidden; }
+  .field-inner span { padding: 0 10px; font-size: 13px; color: var(--text-muted); border-right: 0.5px solid var(--border); white-space: nowrap; height: 100%; display: flex; align-items: center; }
   .field-inner span.suffix { border-right: none; border-left: 0.5px solid var(--border); }
-  .field-inner input {
-    border: none; background: transparent;
-    padding: 10px 10px; font-size: 15px;
-    color: var(--text); width: 100%; outline: none;
-    -webkit-appearance: none;
-  }
+  .field-inner input { border: none; background: transparent; padding: 10px 10px; font-size: 15px; color: var(--text); width: 100%; outline: none; -webkit-appearance: none; }
   .toggle-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
   .toggle-row label { font-size: 12px; color: var(--text-sec); }
   .toggle-btn { display: flex; border: 0.5px solid var(--border-strong); border-radius: var(--radius); overflow: hidden; }
-  .toggle-btn button {
-    padding: 8px 14px; font-size: 13px;
-    border: none; background: var(--surface2);
-    color: var(--text-sec); cursor: pointer;
-    transition: all 0.15s;
-    -webkit-appearance: none;
-  }
+  .toggle-btn button { padding: 8px 14px; font-size: 13px; border: none; background: var(--surface2); color: var(--text-sec); cursor: pointer; transition: all 0.15s; -webkit-appearance: none; }
   .toggle-btn button.active { background: var(--accent); color: #fff; }
-  .calc-btn {
-    width: 100%; padding: 13px;
-    background: var(--accent); color: #fff;
-    border: none; border-radius: var(--radius);
-    font-size: 15px; font-weight: 500;
-    cursor: pointer; margin-top: 6px;
-    -webkit-appearance: none;
-    -webkit-tap-highlight-color: transparent;
-  }
+  .calc-btn { width: 100%; padding: 13px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius); font-size: 15px; font-weight: 500; cursor: pointer; margin-top: 6px; -webkit-appearance: none; -webkit-tap-highlight-color: transparent; }
   .calc-btn:active { opacity: 0.85; transform: scale(0.98); }
-
   .results { display: none; }
   .results.visible { display: block; }
-
-  .alert {
-    border-radius: var(--radius);
-    padding: 12px 14px;
-    font-size: 13px;
-    margin-bottom: 1rem;
-    line-height: 1.5;
-  }
+  .alert { border-radius: var(--radius); padding: 12px 14px; font-size: 13px; margin-bottom: 1rem; line-height: 1.5; }
   .alert.success { background: var(--success-bg); color: var(--success-text); border: 0.5px solid var(--success); }
   .alert.warning { background: var(--warning-bg); color: var(--warning-text); }
-
   .result-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
-  .rcard {
-    background: var(--surface);
-    border: 0.5px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1rem;
-  }
+  .rcard { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 1rem; }
   .rcard.highlight { border-color: var(--accent); background: var(--accent-bg); }
   .rcard .rc-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
   .rcard .rc-value { font-size: 20px; font-weight: 600; color: var(--text); }
   .rcard.highlight .rc-value { color: var(--accent-text); }
   .rcard .rc-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-
-  .breakdown {
-    background: var(--surface);
-    border: 0.5px solid var(--border);
-    border-radius: 12px;
-    padding: 1.25rem;
-    margin-bottom: 1rem;
-  }
+  .breakdown { background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
   .breakdown-title { font-size: 12px; font-weight: 500; color: var(--text-sec); margin-bottom: 10px; }
-  .brow {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 7px 0;
-    border-bottom: 0.5px solid var(--border);
-    font-size: 13px;
-  }
+  .brow { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 0.5px solid var(--border); font-size: 13px; }
   .brow:last-child { border-bottom: none; }
   .brow .bl { color: var(--text-sec); }
   .brow .bv { font-weight: 500; }
@@ -194,90 +99,33 @@
   .brow .bv.pos { color: var(--success); }
   .brow.total { border-top: 1px solid var(--border-strong); margin-top: 4px; padding-top: 10px; }
   .brow.total .bl, .brow.total .bv { font-weight: 600; font-size: 14px; }
-
-  .anchor-box {
-    background: var(--surface);
-    border: 0.5px solid var(--accent);
-    border-radius: 12px;
-    padding: 1.25rem;
-    margin-bottom: 1rem;
-  }
-  .anchor-title {
-    font-size: 12px; font-weight: 600;
-    color: var(--accent-text);
-    margin-bottom: 12px;
-    display: flex; align-items: center; gap: 6px;
-    text-transform: uppercase; letter-spacing: 0.05em;
-  }
+  .anchor-box { background: var(--surface); border: 0.5px solid var(--accent); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
+  .anchor-title { font-size: 12px; font-weight: 600; color: var(--accent-text); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
   .anchor-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  .acard {
-    background: var(--surface2);
-    border: 0.5px solid var(--border);
-    border-radius: var(--radius);
-    padding: 10px 8px;
-    text-align: center;
-  }
+  .acard { background: var(--surface2); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 10px 8px; text-align: center; }
   .acard .ac-label { font-size: 10px; color: var(--text-muted); margin-bottom: 5px; }
   .acard .ac-price { font-size: 16px; font-weight: 600; color: var(--text); }
   .acard .ac-orig { font-size: 10px; color: var(--text-muted); text-decoration: line-through; margin-top: 2px; }
-  .acard .ac-badge {
-    display: inline-block; margin-top: 5px;
-    font-size: 10px; padding: 2px 7px;
-    border-radius: 20px;
-    background: var(--danger-bg); color: var(--danger-text);
-  }
-  .anchor-tip {
-    font-size: 12px; color: var(--text-muted);
-    margin-top: 12px; line-height: 1.6;
-    padding-top: 10px;
-    border-top: 0.5px solid var(--border);
-  }
+  .acard .ac-badge { display: inline-block; margin-top: 5px; font-size: 10px; padding: 2px 7px; border-radius: 20px; background: var(--danger-bg); color: var(--danger-text); }
+  .anchor-tip { font-size: 12px; color: var(--text-muted); margin-top: 12px; line-height: 1.6; padding-top: 10px; border-top: 0.5px solid var(--border); }
   .anchor-tip strong { color: var(--text-sec); }
-
-  .atacado-box {
-    background: var(--surface);
-    border: 0.5px solid var(--border);
-    border-radius: 12px;
-    padding: 1.25rem;
-    display: none;
-  }
+  .atacado-box { background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; padding: 1.25rem; display: none; }
   .atacado-title { font-size: 12px; font-weight: 500; color: var(--text-sec); margin-bottom: 10px; }
-  .atrow {
-    display: grid; grid-template-columns: 90px 1fr 80px;
-    gap: 8px; align-items: center;
-    font-size: 13px; padding: 7px 0;
-    border-bottom: 0.5px solid var(--border);
-  }
-  .atrow:last-child { border-bottom: none; }
-  .atrow.header { color: var(--text-muted); font-size: 11px; }
-  .atrow .qty { color: var(--text-sec); }
-  .atrow .price { font-weight: 500; }
-  .atrow .margin { text-align: right; }
-
-  @media (max-width: 360px) {
-    .result-cards { grid-template-columns: 1fr; }
-    .anchor-grid { grid-template-columns: 1fr; }
-  }
+  @media (max-width: 360px) { .result-cards { grid-template-columns: 1fr; } .anchor-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
-
 <header>
   <div class="logo">ML</div>
-  <div>
-    <h1>Calculadora de Preço</h1>
-    <p>Mercado Livre · Margem & Ancoragem</p>
-  </div>
+  <div><h1>Calculadora de Preço</h1><p>Mercado Livre · Margem & Ancoragem</p></div>
 </header>
-
 <div class="container">
-
   <div class="section">
     <div class="section-title">Produto</div>
     <div class="field-row">
       <div class="field">
         <label>Custo do produto (R$)</label>
-        <div class="field-inner"><span>R$</span><input type="number" id="custo" value="7.50" step="0.01" min="0" inputmode="decimal"></div>
+        <div class="field-inner"><span>R$</span><input type="number" id="custo" value="7.50" step="0.01" min="0" inputmode="decimal" oninput="sincronizarCusto()"></div>
       </div>
       <div class="field">
         <label>Peso (kg)</label>
@@ -295,7 +143,6 @@
       </div>
     </div>
   </div>
-
   <div class="section">
     <div class="section-title">Configurações Mercado Livre</div>
     <div class="toggle-row">
@@ -317,34 +164,14 @@
     </div>
     <button class="calc-btn" onclick="calcular()">Calcular preços ↗</button>
   </div>
-
   <div class="results" id="results">
-
     <div id="alert-box" class="alert success"></div>
-
     <div class="result-cards">
-      <div class="rcard">
-        <div class="rc-label">Preço de venda</div>
-        <div class="rc-value" id="r-preco-ideal">—</div>
-        <div class="rc-sub">preço recomendado</div>
-      </div>
-      <div class="rcard highlight">
-        <div class="rc-label">Margem líquida</div>
-        <div class="rc-value" id="r-margem-real">—</div>
-        <div class="rc-sub" id="r-lucro-sub">lucro por unidade</div>
-      </div>
-      <div class="rcard">
-        <div class="rc-label">Lucro líquido</div>
-        <div class="rc-value" id="r-lucro">—</div>
-        <div class="rc-sub">por unidade vendida</div>
-      </div>
-      <div class="rcard">
-        <div class="rc-label">Preço ancorado</div>
-        <div class="rc-value" id="r-ancora">—</div>
-        <div class="rc-sub">suba agora</div>
-      </div>
+      <div class="rcard"><div class="rc-label">Preço de venda</div><div class="rc-value" id="r-preco-ideal">—</div><div class="rc-sub">preço recomendado</div></div>
+      <div class="rcard highlight"><div class="rc-label">Margem líquida</div><div class="rc-value" id="r-margem-real">—</div><div class="rc-sub" id="r-lucro-sub">lucro por unidade</div></div>
+      <div class="rcard"><div class="rc-label">Lucro líquido</div><div class="rc-value" id="r-lucro">—</div><div class="rc-sub">por unidade vendida</div></div>
+      <div class="rcard"><div class="rc-label">Preço ancorado</div><div class="rc-value" id="r-ancora">—</div><div class="rc-sub">suba agora</div></div>
     </div>
-
     <div class="breakdown">
       <div class="breakdown-title">Detalhamento de taxas</div>
       <div class="brow"><span class="bl">Preço de venda</span><span class="bv" id="b-venda">—</span></div>
@@ -356,37 +183,18 @@
       <div class="brow"><span class="bl">Custo do produto</span><span class="bv neg" id="b-custo">—</span></div>
       <div class="brow total"><span class="bl">Lucro líquido</span><span class="bv pos" id="b-lucro">—</span></div>
     </div>
-
     <div class="anchor-box">
       <div class="anchor-title">🎯 Estratégia de ancoragem</div>
       <div class="anchor-grid">
-        <div class="acard">
-          <div class="ac-label">Preço ancorado</div>
-          <div class="ac-price" id="a-anchor">—</div>
-          <div class="ac-orig">preço cheio</div>
-          <div class="ac-badge" id="a-suba">suba agora</div>
-        </div>
-        <div class="acard">
-          <div class="ac-label">Preço promocional</div>
-          <div class="ac-price" id="a-promo">—</div>
-          <div class="ac-orig" id="a-promo-orig">—</div>
-          <div class="ac-badge" id="a-badge-pct">30% off</div>
-        </div>
-        <div class="acard">
-          <div class="ac-label">Margem na promoção</div>
-          <div class="ac-price" id="a-margem-promo">—</div>
-          <div class="ac-orig" id="a-lucro-promo">—</div>
-          <div class="ac-badge" id="a-ok">verificando</div>
-        </div>
+        <div class="acard"><div class="ac-label">Preço ancorado</div><div class="ac-price" id="a-anchor">—</div><div class="ac-orig">preço cheio</div><div class="ac-badge" id="a-suba">suba agora</div></div>
+        <div class="acard"><div class="ac-label">Preço promocional</div><div class="ac-price" id="a-promo">—</div><div class="ac-orig" id="a-promo-orig">—</div><div class="ac-badge" id="a-badge-pct">30% off</div></div>
+        <div class="acard"><div class="ac-label">Margem na promoção</div><div class="ac-price" id="a-margem-promo">—</div><div class="ac-orig" id="a-lucro-promo">—</div><div class="ac-badge" id="a-ok">verificando</div></div>
       </div>
-      <div class="anchor-tip">
-        <strong>Como usar:</strong> Suba para o preço ancorado agora → aguarde ~7 dias → ative a promoção com o desconto configurado → comprador vê o desconto e você mantém a margem nos Ads.
-      </div>
+      <div class="anchor-tip"><strong>Como usar:</strong> Suba para o preço ancorado agora → aguarde ~7 dias → ative a promoção com o desconto configurado → comprador vê o desconto e você mantém a margem nos Ads.</div>
     </div>
-
     <div class="atacado-box" id="atacado-box">
       <div class="atacado-title">Tabela de atacado</div>
-      <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">Digite seu custo unitário → preços calculados automaticamente.</div>
+      <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">Custo unitário sincronizado com o campo acima.</div>
       <div style="display:flex; align-items:center; gap:8px; margin-bottom:14px; flex-wrap:wrap;">
         <label style="font-size:13px; color:var(--text-sec);">Custo unitário:</label>
         <div class="field-inner" style="height:36px; width:140px;">
@@ -394,7 +202,6 @@
           <input type="number" id="at-custo-unit" step="0.01" min="0" inputmode="decimal" style="padding:6px 8px;font-size:14px;" placeholder="ex: 7,50" oninput="calcAtacadoAuto()">
         </div>
       </div>
-
       <div style="overflow-x:auto;">
         <table style="width:100%; border-collapse:collapse; font-size:13px;">
           <thead>
@@ -407,7 +214,7 @@
             </tr>
           </thead>
           <tbody id="at-tbody">
-            <tr><td colspan="5" style="text-align:center; padding:16px; color:var(--text-muted); font-size:12px;">Digite o custo unitário acima</td></tr>
+            <tr><td colspan="5" style="text-align:center; padding:16px; color:var(--text-muted); font-size:12px;">Calcule primeiro</td></tr>
           </tbody>
         </table>
       </div>
@@ -415,30 +222,24 @@
         Varejo: 0% off (12% margem) · Atacado 5+: 8% off (~8% margem) · Atacado 10+: 14% off (~5% margem)
       </div>
     </div>
-
   </div>
 </div>
-
 <script>
 let tipoAnuncio = 'premium';
-
 function setTipo(t) {
   tipoAnuncio = t;
   document.getElementById('btn-premium').className = t === 'premium' ? 'active' : '';
   document.getElementById('btn-classico').className = t === 'classico' ? 'active' : '';
 }
-
 function getFreteCoparticipado(preco, peso) {
   if (preco >= 79) return 0;
   return peso <= 0.3 ? 6.25 : peso <= 0.7 ? 6.50 : 6.75;
 }
-
 function getCustoFixo(preco) {
   if (preco < 29) return 0;
   if (preco <= 79) return 6.50;
   return 0;
 }
-
 function calcLucro(preco, custo, peso, comissaoPct, impostoPct, adsPct) {
   const comissao = preco * comissaoPct / 100;
   const fixo = getCustoFixo(preco);
@@ -449,7 +250,6 @@ function calcLucro(preco, custo, peso, comissaoPct, impostoPct, adsPct) {
   const margem = (lucro / preco) * 100;
   return { comissao, fixo, frete, imposto, ads, lucro, margem };
 }
-
 function encontrarPrecoIdeal(custo, peso, comissaoPct, impostoPct, adsPct, margemDesejada) {
   let preco = custo * 3 + 10;
   for (let i = 0; i < 2000; i++) {
@@ -459,10 +259,17 @@ function encontrarPrecoIdeal(custo, peso, comissaoPct, impostoPct, adsPct, marge
   }
   return Math.ceil(preco * 20) / 20;
 }
-
 function fmt(v) { return 'R$ ' + v.toFixed(2).replace('.', ','); }
 function fmtPct(v) { return v.toFixed(1) + '%'; }
-
+function sincronizarCusto() {
+  const custo = parseFloat(document.getElementById('custo').value);
+  if (!custo || custo <= 0) return;
+  const campoAt = document.getElementById('at-custo-unit');
+  campoAt.value = custo.toFixed(2);
+  if (document.getElementById('atacado-box').style.display === 'block') {
+    calcAtacadoAuto();
+  }
+}
 function calcular() {
   const custo = parseFloat(document.getElementById('custo').value) || 0;
   const peso = parseFloat(document.getElementById('peso').value) || 0.5;
@@ -471,18 +278,15 @@ function calcular() {
   const adsPct = parseFloat(document.getElementById('ads').value) || 10;
   const impostoPct = parseFloat(document.getElementById('imposto').value) || 6;
   const comissaoPct = tipoAnuncio === 'premium' ? 16 : 11;
-
   const precoIdeal = encontrarPrecoIdeal(custo, peso, comissaoPct, impostoPct, adsPct, margemDes);
   const rIdeal = calcLucro(precoIdeal, custo, peso, comissaoPct, impostoPct, adsPct);
   const precoAncora = Math.ceil((precoIdeal / (1 - ancPct / 100)) * 20) / 20;
   const rPromo = calcLucro(precoIdeal, custo, peso, comissaoPct, impostoPct, adsPct);
-
   document.getElementById('r-preco-ideal').textContent = fmt(precoIdeal);
   document.getElementById('r-margem-real').textContent = fmtPct(rIdeal.margem);
   document.getElementById('r-lucro').textContent = fmt(rIdeal.lucro);
   document.getElementById('r-lucro-sub').textContent = fmt(rIdeal.lucro) + ' por un.';
   document.getElementById('r-ancora').textContent = fmt(precoAncora);
-
   document.getElementById('b-venda').textContent = fmt(precoIdeal);
   document.getElementById('b-comissao-label').textContent = 'Comissão ML (' + comissaoPct + '%)';
   document.getElementById('b-comissao').textContent = '- ' + fmt(rIdeal.comissao);
@@ -494,53 +298,42 @@ function calcular() {
   document.getElementById('b-ads').textContent = '- ' + fmt(rIdeal.ads);
   document.getElementById('b-custo').textContent = '- ' + fmt(custo);
   document.getElementById('b-lucro').textContent = fmt(rIdeal.lucro);
-
   document.getElementById('a-anchor').textContent = fmt(precoAncora);
   document.getElementById('a-promo').textContent = fmt(precoIdeal);
   document.getElementById('a-promo-orig').textContent = 'era ' + fmt(precoAncora);
   document.getElementById('a-badge-pct').textContent = ancPct + '% off';
   document.getElementById('a-margem-promo').textContent = fmtPct(rPromo.margem);
   document.getElementById('a-lucro-promo').textContent = fmt(rPromo.lucro) + ' por un.';
-
   const okPromo = rPromo.margem >= margemDes * 0.95;
   const badgeEl = document.getElementById('a-ok');
   badgeEl.textContent = okPromo ? 'Margem ok ✓' : 'Margem baixa';
   badgeEl.style.background = okPromo ? 'var(--success-bg)' : 'var(--danger-bg)';
   badgeEl.style.color = okPromo ? 'var(--success-text)' : 'var(--danger-text)';
-
   const alert = document.getElementById('alert-box');
   alert.textContent = 'Preço ideal: ' + fmt(precoIdeal) + ' | Ancorado: ' + fmt(precoAncora) + ' | Promo: ' + fmt(precoIdeal) + ' (' + ancPct + '% off · ' + fmtPct(rPromo.margem) + ' de margem)';
   alert.className = 'alert ' + (okPromo ? 'success' : 'warning');
-
   document.getElementById('atacado-box').style.display = 'block';
-  // Pre-preenche campo custo se vazio
   const campoAt = document.getElementById('at-custo-unit');
-  if (!campoAt.value) campoAt.value = custo.toFixed(2);
+  campoAt.value = custo.toFixed(2);
   calcAtacadoAuto();
   document.getElementById('results').className = 'results visible';
   document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
-
-
 function calcAtacadoAuto() {
   const custoUnit = parseFloat(document.getElementById('at-custo-unit').value);
   if (!custoUnit || custoUnit <= 0) return;
-
   const peso = parseFloat(document.getElementById('peso').value) || 0.5;
   const adsPct = parseFloat(document.getElementById('ads').value) || 10;
   const impostoPct = parseFloat(document.getElementById('imposto').value) || 6;
   const ancPct = parseFloat(document.getElementById('ancoragem').value) || 30;
   const comissaoPct = tipoAnuncio === 'premium' ? 16 : 11;
   const margemDes = parseFloat(document.getElementById('margem').value) || 12;
-
   const faixas = [
-    { qtd: 1,  label: '1 unidade',  desc: 'varejo',   margAlvo: margemDes, descPct: 0 },
-    { qtd: 5,  label: '5 unidades', desc: '8% off',   margAlvo: 8,         descPct: 0.08 },
-    { qtd: 10, label: '10 unidades',desc: '14% off',  margAlvo: 5,         descPct: 0.14 }
+    { qtd: 1,  label: '1 unidade',   desc: 'varejo',  descPct: 0 },
+    { qtd: 5,  label: '5 unidades',  desc: '8% off',  descPct: 0.08 },
+    { qtd: 10, label: '10 unidades', desc: '14% off', descPct: 0.14 }
   ];
-
   const precoBase = encontrarPrecoIdeal(custoUnit, peso, comissaoPct, impostoPct, adsPct, margemDes);
-
   let html = '';
   faixas.forEach(f => {
     const precoUnit = Math.ceil((precoBase * (1 - f.descPct)) * 20) / 20;
@@ -549,18 +342,15 @@ function calcAtacadoAuto() {
     const vendaTotal = precoUnit * f.qtd;
     const ancoraUnit = Math.ceil((precoUnit / (1 - ancPct / 100)) * 20) / 20;
     const ancoraTotal = ancoraUnit * f.qtd;
-    const margemOk = rAt.margem >= 4;
-    const cor = margemOk ? 'var(--success)' : 'var(--danger)';
-
+    const cor = rAt.margem >= 4 ? 'var(--success)' : 'var(--danger)';
     html += '<tr style="border-bottom:0.5px solid var(--border);">';
-    html += '<td style="padding:8px 8px; color:var(--text-primary); font-weight:500;">' + f.label + '</td>';
-    html += '<td style="padding:8px 8px; text-align:right; color:var(--text-secondary);">' + fmt(custoTotal) + '</td>';
-    html += '<td style="padding:8px 8px; text-align:right; color:var(--text-primary); font-weight:500;">' + fmt(vendaTotal) + '<br><span style="font-size:11px;color:var(--text-muted);">' + fmt(precoUnit) + '/un · ' + f.desc + '</span></td>';
-    html += '<td style="padding:8px 8px; text-align:right; color:var(--text-accent);">' + fmt(ancoraTotal) + '<br><span style="font-size:11px;color:var(--text-muted);">' + fmt(ancoraUnit) + '/un</span></td>';
-    html += '<td style="padding:8px 8px; text-align:right; color:' + cor + '; font-weight:500;">' + fmtPct(rAt.margem) + '</td>';
+    html += '<td style="padding:8px; font-weight:500;">' + f.label + '</td>';
+    html += '<td style="padding:8px; text-align:right;">' + fmt(custoTotal) + '</td>';
+    html += '<td style="padding:8px; text-align:right; font-weight:500;">' + fmt(vendaTotal) + '<br><span style="font-size:11px;color:var(--text-muted);">' + fmt(precoUnit) + '/un · ' + f.desc + '</span></td>';
+    html += '<td style="padding:8px; text-align:right;">' + fmt(ancoraTotal) + '<br><span style="font-size:11px;color:var(--text-muted);">' + fmt(ancoraUnit) + '/un</span></td>';
+    html += '<td style="padding:8px; text-align:right; color:' + cor + '; font-weight:500;">' + fmtPct(rAt.margem) + '</td>';
     html += '</tr>';
   });
-
   document.getElementById('at-tbody').innerHTML = html;
 }
 </script>
